@@ -186,20 +186,51 @@ class LaunchDialog(QDialog):
         # === BUTTONS AT BOTTOM ===
         btn_row = QHBoxLayout()
         btn_row.setSpacing(12)
+        info_btn = QPushButton("Info")
         cancel_btn = QPushButton("Cancel")
         launch_btn = QPushButton("Launch Dashboard")
-        
+
+        info_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
         cancel_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
         launch_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
+        info_btn.setMinimumHeight(36)
         cancel_btn.setMinimumHeight(36)
         launch_btn.setMinimumHeight(36)
-        
+
+        info_btn.clicked.connect(self._show_info)
         cancel_btn.clicked.connect(self.reject)
         launch_btn.clicked.connect(self._accept)
         btn_row.addStretch(1)
+        btn_row.addWidget(info_btn)
         btn_row.addWidget(cancel_btn)
         btn_row.addWidget(launch_btn)
         main_layout.addLayout(btn_row)
+
+    def _show_info(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("About Case Screen Dashboard")
+        dialog.setModal(True)
+        dialog.setMinimumSize(400, 250)
+        layout = QVBoxLayout(dialog)
+        layout.setSpacing(12)
+        layout.setContentsMargins(24, 24, 24, 24)
+
+        title = QLabel("Case Screen Dashboard")
+        title.setStyleSheet("font-size: 14pt; font-weight: bold;")
+        layout.addWidget(title)
+
+        credits = QLabel("Developed by H.Knight\n\nHYTE Y70ti PC Case Dashboard\nMinimal, personalized, and productivity-focused\n\nSee README for details and licensing.")
+        credits.setStyleSheet("font-size: 11pt;")
+        credits.setWordWrap(True)
+        layout.addWidget(credits)
+
+        ok_btn = QPushButton("OK")
+        ok_btn.setStyleSheet("font-size: 11pt; padding: 8px;")
+        ok_btn.setMinimumHeight(32)
+        ok_btn.clicked.connect(dialog.accept)
+        layout.addWidget(ok_btn)
+
+        dialog.exec()
 
     def _open_uni_dialog(self):
         dialog = QDialog(self)
