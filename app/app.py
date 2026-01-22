@@ -3,7 +3,9 @@ from __future__ import annotations
 import sys
 from typing import List
 
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QIcon
+import os
+from pathlib import Path
 from PySide6.QtWidgets import QApplication
 
 from app.config import load_config, save_config
@@ -20,6 +22,15 @@ def run_app(argv: List[str] | None = None) -> int:
     app.setStyle("Fusion")
     # Use a reasonable default system font size for consistent UI scaling
     app.setFont(QFont("Segoe UI", 14))
+
+    # Optionally set app icon if available at assets/icon.ico
+    project_root = Path(__file__).resolve().parents[1]
+    icon_path = project_root / "assets" / "icon.ico"
+    if icon_path.exists():
+        try:
+            app.setWindowIcon(QIcon(str(icon_path)))
+        except Exception:
+            pass
 
     cfg = load_config()
 

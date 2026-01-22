@@ -35,9 +35,15 @@ def build():
             "--onefile",
             "--windowed",
             "--name", "CaseDashboard",
-            # add the ui folder as data so package resources are available
-            "--add-data", f"ui{os.pathsep}ui",
         ]
+
+        # Add ui package as data
+        cmd.extend(["--add-data", f"ui{os.pathsep}ui"])
+
+        # If an icon exists at assets/icon.ico, embed it into the EXE
+        icon_path = Path("assets") / "icon.ico"
+        if icon_path.exists():
+            cmd.extend(["--icon", str(icon_path)])
 
         for h in hidden:
             cmd.extend(["--hidden-import", h])

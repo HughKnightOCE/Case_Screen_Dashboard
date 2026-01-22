@@ -19,6 +19,13 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("case dashboard")
         self.setGeometry(screen_geometry)
+        # set window icon if available
+        icon_path = Path(__file__).resolve().parents[1] / "assets" / "icon.ico"
+        if icon_path.exists():
+            try:
+                self.setWindowIcon(QIcon(str(icon_path)))
+            except Exception:
+                pass
 
         # Create main container
         container = QWidget(self)

@@ -25,6 +25,10 @@ from PySide6.QtWidgets import (
     QAbstractItemView,
     QSpinBox,
 )
+from PySide6.QtGui import QDesktopServices
+from PySide6.QtCore import QUrl
+import webbrowser
+from pathlib import Path
 
 from app.config import PRESETS
 
@@ -219,16 +223,44 @@ class LaunchDialog(QDialog):
         title.setStyleSheet("font-size: 14pt; font-weight: bold;")
         layout.addWidget(title)
 
-        credits = QLabel("Developed by H.Knight\n\nHYTE Y70ti PC Case Dashboard\nMinimal, personalized, and productivity-focused\n\nSee README for details and licensing.")
+        credits_text = (
+            "Developed by H.Knight\n\n"
+            "HYTE Y70ti PC Case Dashboard\n"
+            "Minimal, personalized, and productivity-focused\n\n"
+            "Contact: hugh.knight17@gmail.com\n"
+            "GitHub: https://github.com/HughKnightOCE/Case_Screen_Dashboard\n\n"
+            "See README for usage, configuration, and licensing."
+        )
+        credits = QLabel(credits_text)
         credits.setStyleSheet("font-size: 11pt;")
         credits.setWordWrap(True)
         layout.addWidget(credits)
+
+        btn_row = QHBoxLayout()
+        open_readme = QPushButton("Open README")
+        open_readme.setStyleSheet("font-size: 11pt; padding: 6px;")
+        open_readme.setMinimumHeight(32)
+        open_readme.clicked.connect(lambda: webbrowser.open("https://github.com/HughKnightOCE/Case_Screen_Dashboard"))
+        btn_row.addWidget(open_readme)
 
         ok_btn = QPushButton("OK")
         ok_btn.setStyleSheet("font-size: 11pt; padding: 8px;")
         ok_btn.setMinimumHeight(32)
         ok_btn.clicked.connect(dialog.accept)
-        layout.addWidget(ok_btn)
+        btn_row.addStretch(1)
+        btn_row.addWidget(ok_btn)
+        layout.addLayout(btn_row)
+
+        # offer to open README local file if available
+        repo_root = Path(__file__).resolve().parents[1]
+        readme_path = repo_root / "README.md"
+        if readme_path.exists():
+            def open_local_readme():
+                QDesktopServices.openUrl(QUrl.fromLocalFile(str(readme_path)))
+            open_local = QPushButton("Open Local README")
+            open_local.setStyleSheet("font-size: 11pt; padding: 6px;")
+            open_local.clicked.connect(open_local_readme)
+            layout.addWidget(open_local)
 
         dialog.exec()
 
