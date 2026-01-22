@@ -22,6 +22,17 @@ WIDGET_TYPES: list[str] = [
     "distraction_blocker",
     "hydration_reminder",
     "pomodoro_cycles",
+    # New widgets
+    "calendar",
+    "weather",
+    "habit_tracker",
+    "motivational_quote",
+    "system_stats",
+    "countdown",
+    "sticky_notes",
+    "media_controls",
+    "focus_music",
+    "github_notifications",
 ]
 
 DEFAULT_LAYOUT: dict[str, str] = {

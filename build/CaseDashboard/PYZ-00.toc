@@ -383,6 +383,46 @@
    'C:\\Users\\Hugh\\Qsync\\Coding '
    'projects\\Case_Screen_Dashboard\\ui\\widgets\\__init__.py',
    'PYMODULE'),
+  ('ui.widgets.calendar_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\calendar_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.countdown_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\countdown_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.focus_music_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\focus_music_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.github_notifications_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\github_notifications_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.habit_tracker_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\habit_tracker_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.media_controls_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\media_controls_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.motivational_quote_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\motivational_quote_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.sticky_notes_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\sticky_notes_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.system_stats_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\system_stats_widget.py',
+   'PYMODULE'),
+  ('ui.widgets.weather_widget',
+   'C:\\Users\\Hugh\\Qsync\\Coding '
+   'projects\\Case_Screen_Dashboard\\ui\\widgets\\weather_widget.py',
+   'PYMODULE'),
   ('urllib',
    'C:\\Users\\Hugh\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\urllib\\__init__.py',
    'PYMODULE'),
