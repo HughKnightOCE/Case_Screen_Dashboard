@@ -1,13 +1,28 @@
 # Case Screen Dashboard
 
+A personalized dashboard for the HYTE Y70ti PC case
+
+## Background & Motivation
+
+This project was created to address the limitations of the stock HYTE software for the Y70ti PC case. The default software offered only basic system monitoring and limited customization, which didn't fit my workflow or aesthetic preferences.
+
+I wanted a dashboard that would:
+- Be minimalistic and visually clean
+- Help me stay on top of day-to-day tasks
+- Track university assignments and deadlines
+- Provide a focus timer and productivity tools
+- Allow full control over layout and widgets
+
+The Case Screen Dashboard is designed to run on the Y70ti's built-in display, but works on any monitor. It is fully data-driven, so you can swap widgets, change layouts, and personalize the experience to suit your needs.
+
+**Why?**
+I built this because I wanted my PC case display to be genuinely useful—not just a system monitor or RGB gimmick. This dashboard helps me keep organized, focused, and motivated throughout the day, especially for university work and personal productivity.
+
+If you have a Y70ti (or any case with a display), you can use this project to create your own personalized dashboard.
 A customizable dashboard application built with PySide6 Qt.
 
 ## Features
 
-- Customizable 2x3 grid layout with configurable widgets
-- Screen selection and layout presets
-- Persistent configuration and state
-- Widgets: university tasks, metrics, todo list, focus timer, logs
 
 ## Installation
 
