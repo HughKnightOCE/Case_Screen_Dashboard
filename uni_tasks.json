@@ -1,0 +1,14 @@
+[
+  {
+    "unit": "CS101",
+    "task": "Assignment 1",
+    "due": "2026-01-30",
+    "done": false
+  },
+  {
+    "unit": "MATH200",
+    "task": "Problem Set 3",
+    "due": "2026-02-05",
+    "done": true
+  }
+]

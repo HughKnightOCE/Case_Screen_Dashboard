@@ -1,0 +1,10 @@
+{
+  "display_index": 2,
+  "layout": {
+    "top_left": "university",
+    "top_right": "metrics",
+    "mid_left": "todo",
+    "bottom_left": "focus_timer",
+    "bottom_right": "logs"
+  }
+}
