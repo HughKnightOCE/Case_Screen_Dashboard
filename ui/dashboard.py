@@ -20,6 +20,16 @@ from ui.widgets import (
     PomodoroCyclesWidget,
 )
 from ui.widgets.fan_speed_widget import FanSpeedWidget
+from ui.widgets.weather_widget import WeatherWidget
+from ui.widgets.calendar_widget import CalendarWidget
+from ui.widgets.habit_tracker_widget import HabitTrackerWidget
+from ui.widgets.motivational_quote_widget import MotivationalQuoteWidget
+from ui.widgets.system_stats_widget import SystemStatsWidget
+from ui.widgets.countdown_widget import CountdownWidget
+from ui.widgets.sticky_notes_widget import StickyNotesWidget
+from ui.widgets.media_controls_widget import MediaControlsWidget
+from ui.widgets.focus_music_widget import FocusMusicWidget
+from ui.widgets.github_notifications_widget import GitHubNotificationsWidget
 
 
 class DashboardView(QWidget):
@@ -139,6 +149,66 @@ class DashboardView(QWidget):
 
         if wt == "fan_speed":
             return FanSpeedWidget(self)
+
+        if wt == "weather":
+            try:
+                return WeatherWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "calendar":
+            try:
+                return CalendarWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "habit_tracker":
+            try:
+                return HabitTrackerWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "motivational_quote":
+            try:
+                return MotivationalQuoteWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "system_stats":
+            try:
+                return SystemStatsWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "countdown":
+            try:
+                return CountdownWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "sticky_notes":
+            try:
+                return StickyNotesWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "media_controls":
+            try:
+                return MediaControlsWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "focus_music":
+            try:
+                return FocusMusicWidget()
+            except Exception:
+                return QWidget(self)
+
+        if wt == "github_notifications":
+            try:
+                return GitHubNotificationsWidget()
+            except Exception:
+                return QWidget(self)
 
         # Unknown type -> fallback
         if wt != fallback:
