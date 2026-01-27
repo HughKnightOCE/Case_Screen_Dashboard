@@ -8,8 +8,8 @@ from typing import Dict
 # Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtCore import Qt, QMimeData, QSize
+from PySide6.QtGui import QGuiApplication, QDrag, QColor, QFont
 from PySide6.QtWidgets import (
     QDialog,
     QVBoxLayout,
@@ -24,6 +24,9 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QAbstractItemView,
     QSpinBox,
+    QWidget,
+    QFrame,
+    QGridLayout,
 )
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtCore import QUrl
@@ -48,6 +51,173 @@ def list_screens() -> list[str]:
         )
 
     return result
+
+
+# =========================
+# Draggable Widget List
+# =========================
+
+class DraggableWidgetList(QListWidget):
+    """
+    Custom QListWidget that properly supports dragging widget names.
+    """
+    
+    def startDrag(self, supportedActions):
+        """Override to set proper MIME data when dragging."""
+        item = self.currentItem()
+        if not item:
+            return
+        
+        mime_data = QMimeData()
+        mime_data.setText(item.text())
+        
+        drag = QDrag(self)
+        drag.setMimeData(mime_data)
+        drag.exec(supportedActions)
+
+
+# =========================
+# Layout Grid Widget (Visual Slot Editor)
+# =========================
+
+class LayoutGridCell(QFrame):
+    """
+    A single cell in the layout grid.
+    Represents one dashboard slot and accepts drag-dropped widgets.
+    """
+    
+    def __init__(self, slot_name: str, parent: QWidget | None = None):
+        super().__init__(parent)
+        self.slot_name = slot_name
+        self.widget_name: str | None = None
+        
+        self.setFrameShape(QFrame.Shape.StyledPanel)
+        self.setFrameShadow(QFrame.Shadow.Raised)
+        self.setLineWidth(2)
+        self.setMinimumSize(QSize(150, 100))
+        self.setAcceptDrops(True)
+        
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(6)
+        
+        # Slot label
+        self.slot_label = QLabel(slot_name)
+        self.slot_label.setStyleSheet("font-size: 9pt; color: #666666; font-weight: bold;")
+        layout.addWidget(self.slot_label)
+        
+        # Widget name display
+        self.widget_label = QLabel("(empty)")
+        self.widget_label.setStyleSheet("font-size: 11pt; font-weight: bold; color: #00aa00;")
+        self.widget_label.setWordWrap(True)
+        self.widget_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.widget_label, 1)
+        
+        # Clear button
+        self.clear_btn = QPushButton("×")
+        self.clear_btn.setMaximumSize(QSize(30, 30))
+        self.clear_btn.setStyleSheet("font-size: 12pt; padding: 2px;")
+        self.clear_btn.clicked.connect(self.clear_widget)
+        layout.addWidget(self.clear_btn, 0, Qt.AlignmentFlag.AlignRight)
+        
+        self._update_style()
+    
+    def set_widget(self, widget_name: str) -> None:
+        """Set the widget in this slot."""
+        self.widget_name = widget_name if widget_name and widget_name != "blank" else None
+        self.widget_label.setText(widget_name if widget_name else "(empty)")
+        self._update_style()
+    
+    def clear_widget(self) -> None:
+        """Clear the widget from this slot."""
+        self.set_widget(None)
+    
+    def _update_style(self) -> None:
+        """Update cell appearance based on content."""
+        if self.widget_name:
+            self.setStyleSheet("QFrame { border: 2px solid #00aa00; background-color: #1a1a1a; border-radius: 4px; }")
+        else:
+            self.setStyleSheet("QFrame { border: 2px dashed #444444; background-color: #0f0f0f; border-radius: 4px; }")
+    
+    def dragEnterEvent(self, event):
+        """Accept drag if it contains widget name."""
+        if event.mimeData().hasText():
+            event.acceptProposedAction()
+            self.setStyleSheet("QFrame { border: 2px solid #ffaa00; background-color: #1a1a1a; border-radius: 4px; }")
+    
+    def dragLeaveEvent(self, event):
+        """Reset style when drag leaves."""
+        self._update_style()
+    
+    def dropEvent(self, event):
+        """Accept dropped widget."""
+        mime = event.mimeData()
+        if mime.hasText():
+            widget_name = mime.text()
+            self.set_widget(widget_name)
+            event.acceptProposedAction()
+    
+    def get_widget(self) -> str | None:
+        """Get the widget assigned to this slot."""
+        return self.widget_name
+
+
+class LayoutGridWidget(QWidget):
+    """
+    Visual 2x3 grid editor for dashboard layout.
+    Users drag widgets from a source list into grid cells.
+    """
+    
+    def __init__(self, parent: QWidget | None = None):
+        super().__init__(parent)
+        
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
+        
+        # Instructions
+        instr = QLabel("Drag widgets from the list below into the slots to arrange your dashboard:")
+        instr.setStyleSheet("font-size: 10pt; color: #888888;")
+        layout.addWidget(instr)
+        
+        # Grid container
+        grid_container = QWidget()
+        grid_layout = QGridLayout(grid_container)
+        grid_layout.setSpacing(10)
+        grid_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Define slots (2 cols x 3 rows)
+        self.slots = {
+            "top_left": (0, 0),
+            "top_right": (0, 1),
+            "mid_left": (1, 0),
+            "mid_right": (1, 1),
+            "bottom_left": (2, 0),
+            "bottom_right": (2, 1),
+        }
+        
+        self.cells: dict[str, LayoutGridCell] = {}
+        
+        for slot_name, (row, col) in self.slots.items():
+            cell = LayoutGridCell(slot_name, grid_container)
+            self.cells[slot_name] = cell
+            grid_layout.addWidget(cell, row, col)
+        
+        layout.addWidget(grid_container, 1)
+    
+    def set_layout(self, layout_dict: dict[str, str]) -> None:
+        """Load a layout into the grid."""
+        for slot_name, widget_name in layout_dict.items():
+            if slot_name in self.cells:
+                self.cells[slot_name].set_widget(widget_name)
+    
+    def get_layout(self) -> dict[str, str]:
+        """Get the current layout from the grid."""
+        result = {}
+        for slot_name, cell in self.cells.items():
+            widget = cell.get_widget()
+            result[slot_name] = widget if widget else "blank"
+        return result
 
 
 class LaunchDialog(QDialog):
@@ -158,31 +328,45 @@ class LaunchDialog(QDialog):
         todo_layout.addWidget(todo_manage_btn)
         main_layout.addWidget(todo_box)
 
-        # === WIDGET ORDER SECTION ===
-        order_box = QGroupBox("Widget Order")
-        order_box.setStyleSheet("QGroupBox { font-size: 11pt; font-weight: bold; padding-top: 12px; margin-top: 6px; } QGroupBox::title { subcontrol-origin: margin; top: -6px; left: 10px; padding: 0 3px; }")
-        order_layout = QVBoxLayout(order_box)
-        order_layout.setContentsMargins(12, 16, 12, 12)
+        # === LAYOUT EDITOR SECTION (Visual Grid) ===
+        editor_box = QGroupBox("Layout Editor")
+        editor_box.setStyleSheet("QGroupBox { font-size: 11pt; font-weight: bold; padding-top: 12px; margin-top: 6px; } QGroupBox::title { subcontrol-origin: margin; top: -6px; left: 10px; padding: 0 3px; }")
+        editor_layout = QVBoxLayout(editor_box)
+        editor_layout.setContentsMargins(12, 16, 12, 12)
+        editor_layout.setSpacing(12)
 
-        order_label = QLabel("Drag to reorder widgets (top -> bottom display order):")
-        order_label.setStyleSheet("font-size: 11pt;")
-        order_layout.addWidget(order_label)
+        # Visual grid
+        self.layout_grid = LayoutGridWidget(editor_box)
+        editor_layout.addWidget(self.layout_grid, 1)
 
-        self.order_list = QListWidget()
-        self.order_list.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
-        self.order_list.setDefaultDropAction(Qt.MoveAction)
-        self.order_list.setStyleSheet("font-size: 11pt; padding: 4px;")
-        order_layout.addWidget(self.order_list)
+        # Widget source list (for dragging)
+        source_label = QLabel("Available Widgets (drag to slots):")
+        source_label.setStyleSheet("font-size: 10pt; color: #888888;")
+        editor_layout.addWidget(source_label)
 
-        # populate order list from cfg if present
+        self.widget_source = DraggableWidgetList()
+        self.widget_source.setMaximumHeight(100)
+        self.widget_source.setStyleSheet("font-size: 10pt; padding: 4px;")
+        self.widget_source.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        
+        # Populate with available widgets
         from app.config import WIDGET_TYPES
-        preferred = getattr(self.cfg, "widget_order", None)
-        items = preferred if isinstance(preferred, list) else [w for w in WIDGET_TYPES if w != "blank"]
-        for it in items:
-            li = QListWidgetItem(it)
-            self.order_list.addItem(li)
+        for w in WIDGET_TYPES:
+            if w != "blank":
+                item = QListWidgetItem(w)
+                # Make items draggable
+                self.widget_source.addItem(item)
+        
+        # Enable dragging from list
+        self.widget_source.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
+        self.widget_source.setDefaultDropAction(Qt.DropAction.CopyAction)
+        editor_layout.addWidget(self.widget_source)
 
-        main_layout.addWidget(order_box)
+        # Load preset into grid
+        self._refresh_grid_from_preset()
+        self.layout_combo.currentTextChanged.connect(self._refresh_grid_from_preset)
+
+        main_layout.addWidget(editor_box)
 
         # Add stretch to push everything to top
         main_layout.addStretch(1)
@@ -430,17 +614,20 @@ class LaunchDialog(QDialog):
         Persist selections into config object.
         """
         self.cfg.display_index = self.screen_combo.currentIndex()
-        preset_name = self.layout_combo.currentText()
-        self.cfg.layout = PRESETS.get(preset_name, PRESETS["productivity_2col"])
         self.cfg.font_size = self.font_size_spin.value()
-        # Save widget order from list
-        try:
-            order = [self.order_list.item(i).text() for i in range(self.order_list.count())]
-            self.cfg.widget_order = order
-        except Exception:
-            pass
+        
+        # Get layout from visual grid instead of preset
+        self.cfg.layout = self.layout_grid.get_layout()
         
         self.accept()
+
+    def _refresh_grid_from_preset(self) -> None:
+        """
+        Load the currently selected preset into the visual grid.
+        """
+        preset_name = self.layout_combo.currentText()
+        preset_layout = PRESETS.get(preset_name, PRESETS["productivity_2col"])
+        self.layout_grid.set_layout(preset_layout)
 
     def apply_to_config(self):
         return self.cfg
