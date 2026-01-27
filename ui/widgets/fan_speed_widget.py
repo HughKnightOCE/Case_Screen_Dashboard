@@ -1,4 +1,3 @@
-import wmi
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QProgressBar
 from PySide6.QtGui import QFont
@@ -17,8 +16,9 @@ class FanSpeedWidget(QWidget):
         self.fan_items = []
         self.temp_items = []
         
-        # Try to initialize WMI
+        # Try to initialize WMI (lazy import)
         try:
+            import wmi
             self.wmi_interface = wmi.WMI(namespace="root\\cimv2")
         except Exception as e:
             self.wmi_interface = None
