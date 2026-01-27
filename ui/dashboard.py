@@ -47,36 +47,22 @@ class DashboardView(QWidget):
         main_vbox.setContentsMargins(40, 40, 40, 40)
         main_vbox.setSpacing(40)
 
-        # If a widget_order is provided in config, use it to build the vertical stack.
-        # Otherwise fallback to explicit ordering of common widgets.
-        order_to_use = order if order else [
-            "focus_timer",
-            "metrics",
-            "focus_streak",
-            "pomodoro_cycles",
-            "university",
-            "todo",
-            "break_reminder",
-            "hydration_reminder",
-            "distraction_blocker",
-            "logs",
-        ]
-
-        # Map friendly names used in config to actual widget keys
-        key_map = {
-            "pomodoro": "pomodoro_cycles",
-            "pomodoro_cycles": "pomodoro_cycles",
-        }
-
-        for w in order_to_use:
-            wt = key_map.get(w, w)
-            widget = self._make_widget(cfg.get(wt, wt), wt)
+        # Build layout from config dict (single-column slots: slot_1, slot_2, ..., slot_6)
+        # Order slots by number: slot_1, slot_2, slot_3, slot_4, slot_5, slot_6
+        slot_order = [f"slot_{i}" for i in range(1, 7)]
+        
+        for slot_name in slot_order:
+            widget_type = cfg.get(slot_name, "blank")
+            if widget_type == "blank":
+                continue
+            
+            widget = self._make_widget(widget_type, widget_type)
             # sensible defaults for heights
-            if wt == "focus_timer":
+            if widget_type == "focus_timer":
                 widget.setMinimumHeight(320)
-            elif wt == "metrics":
+            elif widget_type == "metrics":
                 widget.setMinimumHeight(240)
-            elif wt in ("university", "todo"):
+            elif widget_type in ("university", "todo"):
                 widget.setMinimumHeight(300)
             else:
                 widget.setMinimumHeight(200)

@@ -164,8 +164,8 @@ class LayoutGridCell(QFrame):
 
 class LayoutGridWidget(QWidget):
     """
-    Visual 2x3 grid editor for dashboard layout.
-    Users drag widgets from a source list into grid cells.
+    Visual single-column editor for dashboard layout.
+    Users drag widgets from a source list into cells (top to bottom).
     """
     
     def __init__(self, parent: QWidget | None = None):
@@ -176,33 +176,35 @@ class LayoutGridWidget(QWidget):
         layout.setSpacing(12)
         
         # Instructions
-        instr = QLabel("Drag widgets from the list below into the slots to arrange your dashboard:")
+        instr = QLabel("Drag widgets from the list below to arrange your dashboard (top to bottom):")
         instr.setStyleSheet("font-size: 10pt; color: #888888;")
         layout.addWidget(instr)
         
         # Grid container
         grid_container = QWidget()
-        grid_layout = QGridLayout(grid_container)
-        grid_layout.setSpacing(10)
+        grid_layout = QVBoxLayout(grid_container)
+        grid_layout.setSpacing(8)
         grid_layout.setContentsMargins(0, 0, 0, 0)
         
-        # Define slots (2 cols x 3 rows)
+        # Define slots (single column, 6 rows)
         self.slots = {
-            "top_left": (0, 0),
-            "top_right": (0, 1),
-            "mid_left": (1, 0),
-            "mid_right": (1, 1),
-            "bottom_left": (2, 0),
-            "bottom_right": (2, 1),
+            "slot_1": 0,
+            "slot_2": 1,
+            "slot_3": 2,
+            "slot_4": 3,
+            "slot_5": 4,
+            "slot_6": 5,
         }
         
         self.cells: dict[str, LayoutGridCell] = {}
         
-        for slot_name, (row, col) in self.slots.items():
+        for slot_name in self.slots:
             cell = LayoutGridCell(slot_name, grid_container)
+            cell.setMaximumHeight(80)
             self.cells[slot_name] = cell
-            grid_layout.addWidget(cell, row, col)
+            grid_layout.addWidget(cell)
         
+        grid_layout.addStretch()
         layout.addWidget(grid_container, 1)
     
     def set_layout(self, layout_dict: dict[str, str]) -> None:
