@@ -278,7 +278,7 @@ class LaunchDialog(QDialog):
         self.layout_combo = QComboBox()
         self.layout_combo.addItems(list(PRESETS.keys()))
         self.layout_combo.setStyleSheet("font-size: 11pt; padding: 4px;")
-        self.layout_combo.setCurrentText("productivity_2col")
+        self.layout_combo.setCurrentText("productivity_single")
         self.layout_combo.setMinimumHeight(28)
         layout_layout.addWidget(layout_label)
         layout_layout.addWidget(self.layout_combo)
@@ -628,7 +628,7 @@ class LaunchDialog(QDialog):
         Load the currently selected preset into the visual grid.
         """
         preset_name = self.layout_combo.currentText()
-        preset_layout = PRESETS.get(preset_name, PRESETS["productivity_2col"])
+        preset_layout = PRESETS.get(preset_name, PRESETS["productivity_single"])
         self.layout_grid.set_layout(preset_layout)
 
     def apply_to_config(self):
