@@ -25,6 +25,7 @@ class WeatherWidget(QWidget):
         lat, lon = self._get_lat_lon(self.location)
         if lat is None or lon is None:
             self.weather_label.setText("Location not found.")
+            self.weather_label.setStyleSheet("color: #ff8800;")
             return
         url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
         try:
@@ -35,9 +36,14 @@ class WeatherWidget(QWidget):
             code = weather.get("weathercode")
             desc = self._weather_desc(code)
             self.weather_label.setText(f"{desc}, {temp}°C")
+            self.weather_label.setStyleSheet("color: #ffffff;")
             self.icon_label.setPixmap(self._icon_for_code(code))
-        except Exception:
-            self.weather_label.setText("Weather unavailable.")
+        except requests.exceptions.ConnectionError:
+            self.weather_label.setText("No internet connection")
+            self.weather_label.setStyleSheet("color: #ff8800;")
+        except Exception as e:
+            self.weather_label.setText(f"Weather unavailable ({str(e)[:30]})")
+            self.weather_label.setStyleSheet("color: #ff8800;")
 
     def _get_lat_lon(self, location):
         # Simple lookup for demo (expand with geocoding API if needed)

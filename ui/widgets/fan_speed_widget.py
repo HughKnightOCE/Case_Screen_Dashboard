@@ -68,7 +68,8 @@ class FanSpeedWidget(QWidget):
     def update_data(self) -> None:
         """Fetch and update fan/temperature data from WMI."""
         if not self.wmi_interface:
-            self.status_label.setText("WMI not available")
+            self.status_label.setText("WMI unavailable - install python-wmi package")
+            self.status_label.setStyleSheet("color: #ff8800; font-style: italic;")
             return
         
         try:
