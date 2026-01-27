@@ -5,8 +5,8 @@ class SystemStatsWidget(QWidget):
     """
     Shows CPU, RAM, GPU, and network usage (minimal, with small bars).
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("System Stats")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

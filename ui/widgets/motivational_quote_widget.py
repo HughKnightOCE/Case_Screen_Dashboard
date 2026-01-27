@@ -15,8 +15,8 @@ class MotivationalQuoteWidget(QWidget):
     """
     Rotates through motivational quotes or affirmations.
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Motivational Quote")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

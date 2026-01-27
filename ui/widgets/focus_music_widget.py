@@ -5,8 +5,8 @@ class FocusMusicWidget(QWidget):
     Plays focus/ambient sounds (rain, white noise, etc.). Simple play/stop and volume.
     (Demo: UI only, no real sound playback yet.)
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Focus Music/Ambience")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

@@ -6,8 +6,8 @@ class CalendarWidget(QWidget):
     """
     Minimal agenda view for upcoming events/tasks from a local .ics file.
     """
-    def __init__(self, ics_path=None):
-        super().__init__()
+    def __init__(self, parent=None, ics_path=None):
+        super().__init__(parent)
         self.ics_path = ics_path or os.path.join(os.getcwd(), "uni_tasks.ics")
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Upcoming Events")

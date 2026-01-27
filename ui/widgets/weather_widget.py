@@ -7,8 +7,8 @@ class WeatherWidget(QWidget):
     """
     Minimal weather widget: shows current weather and short forecast for a chosen location.
     """
-    def __init__(self, location="Melbourne,AU"):
-        super().__init__()
+    def __init__(self, parent=None, location="Melbourne,AU"):
+        super().__init__(parent)
         self.location = location
         self.setLayout(QVBoxLayout())
         self.title = QLabel(f"Weather – {self.location}")

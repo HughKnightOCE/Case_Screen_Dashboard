@@ -6,8 +6,8 @@ class CountdownWidget(QWidget):
     """
     Lets you set a countdown to a specific date/time and shows time remaining.
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Countdown/Deadline")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

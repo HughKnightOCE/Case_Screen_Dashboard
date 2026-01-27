@@ -4,8 +4,8 @@ class StickyNotesWidget(QWidget):
     """
     Lets you jot down quick notes or reminders. Simple text area, persistent between sessions.
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Sticky Notes")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

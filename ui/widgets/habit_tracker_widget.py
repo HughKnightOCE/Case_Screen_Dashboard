@@ -5,8 +5,8 @@ class HabitTrackerWidget(QWidget):
     """
     Lets you tick off daily habits and shows streaks/progress bars.
     """
-    def __init__(self, habits=None):
-        super().__init__()
+    def __init__(self, parent=None, habits=None):
+        super().__init__(parent)
         self.habits = habits or ["Read", "Exercise", "No sugar"]
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Habit Tracker")

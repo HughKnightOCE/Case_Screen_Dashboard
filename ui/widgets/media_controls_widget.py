@@ -5,8 +5,8 @@ class MediaControlsWidget(QWidget):
     Controls for Spotify, YouTube Music, or system media. Play/pause, skip, show current track.
     (Demo: buttons only, no real integration yet.)
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.title = QLabel("Media Controls")
         self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

@@ -6,8 +6,8 @@ class GitHubNotificationsWidget(QWidget):
 	Shows unread notifications or PRs/issues assigned to you.
 	(Demo: UI only, no real API integration yet.)
 	"""
-	def __init__(self):
-		super().__init__()
+	def __init__(self, parent=None):
+		super().__init__(parent)
 		self.setLayout(QVBoxLayout())
 		self.title = QLabel("GitHub Notifications")
 		self.title.setStyleSheet("font-size: 16px; font-weight: bold;")

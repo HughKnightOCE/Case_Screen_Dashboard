@@ -152,61 +152,61 @@ class DashboardView(QWidget):
 
         if wt == "weather":
             try:
-                return WeatherWidget()
+                return WeatherWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "calendar":
             try:
-                return CalendarWidget()
+                return CalendarWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "habit_tracker":
             try:
-                return HabitTrackerWidget()
+                return HabitTrackerWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "motivational_quote":
             try:
-                return MotivationalQuoteWidget()
+                return MotivationalQuoteWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "system_stats":
             try:
-                return SystemStatsWidget()
+                return SystemStatsWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "countdown":
             try:
-                return CountdownWidget()
+                return CountdownWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "sticky_notes":
             try:
-                return StickyNotesWidget()
+                return StickyNotesWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "media_controls":
             try:
-                return MediaControlsWidget()
+                return MediaControlsWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "focus_music":
             try:
-                return FocusMusicWidget()
+                return FocusMusicWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
         if wt == "github_notifications":
             try:
-                return GitHubNotificationsWidget()
+                return GitHubNotificationsWidget(parent=self)
             except Exception:
                 return QWidget(self)
 
