@@ -1,0 +1,34 @@
+{
+  "display_index": 2,
+  "layout": {
+    "slot_1": "focus_timer",
+    "slot_2": "fan_speed",
+    "slot_3": "university",
+    "slot_4": "weather",
+    "slot_5": "break_reminder",
+    "slot_6": "logs"
+  },
+  "widget_order": [
+    "university",
+    "metrics",
+    "todo",
+    "focus_timer",
+    "logs",
+    "break_reminder",
+    "focus_streak",
+    "distraction_blocker",
+    "hydration_reminder",
+    "pomodoro_cycles",
+    "calendar",
+    "weather",
+    "habit_tracker",
+    "motivational_quote",
+    "system_stats",
+    "countdown",
+    "sticky_notes",
+    "media_controls",
+    "focus_music",
+    "github_notifications",
+    "fan_speed"
+  ]
+}

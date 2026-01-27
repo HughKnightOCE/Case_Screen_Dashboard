@@ -1,3 +1,4 @@
+import psutil
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QProgressBar
 from PySide6.QtGui import QFont
@@ -5,23 +6,13 @@ from PySide6.QtGui import QFont
 
 class FanSpeedWidget(QWidget):
     """
-    Displays current PC fan speeds and temperatures.
-    Read-only monitoring widget that queries WMI for fan data.
+    Displays current PC system temperature and hardware status.
+    Uses psutil for cross-platform temperature monitoring.
+    No WMI dependency - works on all systems.
     """
     
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
-        
-        self.wmi_interface = None
-        self.fan_items = []
-        self.temp_items = []
-        
-        # Try to initialize WMI (lazy import)
-        try:
-            import wmi
-            self.wmi_interface = wmi.WMI(namespace="root\\cimv2")
-        except Exception as e:
-            self.wmi_interface = None
         
         # Setup UI
         layout = QVBoxLayout(self)
@@ -36,12 +27,28 @@ class FanSpeedWidget(QWidget):
         title.setFont(title_font)
         layout.addWidget(title)
         
-        # Fan speeds container
-        self.fans_container = QVBoxLayout()
-        self.fans_container.setSpacing(8)
-        layout.addLayout(self.fans_container)
+        # CPU Load section
+        cpu_label_header = QLabel("CPU Load")
+        cpu_label_header.setStyleSheet("color: #aaaaaa; font-size: 10px; font-weight: bold;")
+        layout.addWidget(cpu_label_header)
+        
+        self.cpu_label = QLabel("CPU Load: ---%")
+        self.cpu_label.setStyleSheet("color: #cccccc; font-size: 11px;")
+        layout.addWidget(self.cpu_label)
+        
+        self.cpu_bar = QProgressBar()
+        self.cpu_bar.setMinimum(0)
+        self.cpu_bar.setMaximum(100)
+        self.cpu_bar.setValue(0)
+        self.cpu_bar.setMaximumHeight(8)
+        self.cpu_bar.setStyleSheet("background-color: #222222; border: 1px solid #444444;")
+        layout.addWidget(self.cpu_bar)
         
         # Temperatures container
+        temp_label_header = QLabel("Temperatures")
+        temp_label_header.setStyleSheet("color: #aaaaaa; font-size: 10px; font-weight: bold; margin-top: 12px;")
+        layout.addWidget(temp_label_header)
+        
         self.temps_container = QVBoxLayout()
         self.temps_container.setSpacing(8)
         layout.addLayout(self.temps_container)
@@ -66,48 +73,47 @@ class FanSpeedWidget(QWidget):
         self.update_data()
     
     def update_data(self) -> None:
-        """Fetch and update fan/temperature data from WMI."""
-        if not self.wmi_interface:
-            self.status_label.setText("WMI unavailable - install python-wmi package")
-            self.status_label.setStyleSheet("color: #ff8800; font-style: italic;")
-            return
-        
+        """Fetch and update system temperature data using psutil."""
         try:
-            # Clear old items
-            while self.fans_container.count():
-                self.fans_container.takeAt(0).widget().deleteLater()
+            # Clear old temp items
             while self.temps_container.count():
                 self.temps_container.takeAt(0).widget().deleteLater()
             
-            self.fan_items.clear()
-            self.temp_items.clear()
+            # Get CPU load
+            cpu_percent = psutil.cpu_percent(interval=0.1)
+            self.cpu_label.setText(f"CPU Load: {cpu_percent:.1f}%")
+            self.cpu_bar.setValue(int(cpu_percent))
             
-            # Query fans
-            fans_found = False
-            try:
-                for fan in self.wmi_interface.Win32_Fan():
-                    if fan.Name and fan.CurrentSpeed:
-                        fans_found = True
-                        self._add_fan_item(fan.Name, int(fan.CurrentSpeed))
-            except Exception:
-                pass
-            
-            # Query temperatures
+            # Try to get temperature sensors
             temps_found = False
             try:
-                for temp in self.wmi_interface.Win32_TemperatureProbe():
-                    if temp.Name and temp.CurrentReading:
-                        temps_found = True
-                        # Convert to Celsius (WMI returns in 1/10th degree Kelvin)
-                        temp_c = (int(temp.CurrentReading) - 2732) / 10
-                        self._add_temp_item(temp.Name, temp_c)
+                temps = psutil.sensors_temperatures()
+                if temps:
+                    for sensor_name, sensor_temps in temps.items():
+                        if sensor_temps:
+                            # Use the first reading for each sensor
+                            for reading in sensor_temps:
+                                label = reading.label or sensor_name
+                                current_temp = reading.current
+                                temps_found = True
+                                self._add_temp_item(label, current_temp)
+                                # Only show first sensor per type
+                                break
             except Exception:
                 pass
             
-            if fans_found or temps_found:
+            if temps_found:
                 self.status_label.setText("Live monitoring")
             else:
-                self.status_label.setText("No fan/temperature data available")
+                # Fallback: show CPU frequency
+                try:
+                    freq = psutil.cpu_freq()
+                    if freq:
+                        self.status_label.setText(f"CPU Freq: {freq.current:.0f} MHz (no sensors)")
+                    else:
+                        self.status_label.setText("No temperature sensors available")
+                except Exception:
+                    self.status_label.setText("No temperature sensors available")
         
         except Exception as e:
             self.status_label.setText(f"Error: {str(e)[:40]}")
