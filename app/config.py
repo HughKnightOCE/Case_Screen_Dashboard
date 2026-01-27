@@ -33,6 +33,7 @@ WIDGET_TYPES: list[str] = [
     "media_controls",
     "focus_music",
     "github_notifications",
+    "fan_speed",
 ]
 
 DEFAULT_LAYOUT: dict[str, str] = {

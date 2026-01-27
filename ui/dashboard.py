@@ -19,6 +19,7 @@ from ui.widgets import (
     HydrationReminderWidget,
     PomodoroCyclesWidget,
 )
+from ui.widgets.fan_speed_widget import FanSpeedWidget
 
 
 class DashboardView(QWidget):
@@ -149,6 +150,9 @@ class DashboardView(QWidget):
 
         if wt == "pomodoro_cycles":
             return PomodoroCyclesWidget(self)
+
+        if wt == "fan_speed":
+            return FanSpeedWidget(self)
 
         # Unknown type -> fallback
         if wt != fallback:
