@@ -7,8 +7,8 @@ from typing import Any
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config.json"
 
-# Slot-based layout (2 columns x 3 rows, with a fixed blank in mid-right)
-SLOTS: list[str] = ["top_left", "top_right", "mid_left", "bottom_left", "bottom_right"]
+# Slot-based layout (6 vertical slots for single-column layout)
+SLOTS: list[str] = ["slot_1", "slot_2", "slot_3", "slot_4", "slot_5", "slot_6"]
 
 WIDGET_TYPES: list[str] = [
     "university",

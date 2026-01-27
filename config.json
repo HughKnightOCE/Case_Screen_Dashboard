@@ -1,12 +1,12 @@
 {
   "display_index": -1,
   "layout": {
-    "slot_1": "focus_timer",
-    "slot_2": "metrics",
-    "slot_3": "university",
-    "slot_4": "todo",
-    "slot_5": "break_reminder",
-    "slot_6": "logs"
+    "slot_1": "metrics",
+    "slot_2": "university",
+    "slot_3": "blank",
+    "slot_4": "blank",
+    "slot_5": "blank",
+    "slot_6": "blank"
   },
   "widget_order": [
     "university",
