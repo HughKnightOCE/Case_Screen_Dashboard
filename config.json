@@ -1,10 +1,34 @@
 {
-  "display_index": 2,
+  "display_index": -1,
   "layout": {
-    "top_left": "university",
-    "top_right": "metrics",
-    "mid_left": "todo",
-    "bottom_left": "focus_timer",
-    "bottom_right": "logs"
-  }
+    "slot_1": "focus_timer",
+    "slot_2": "metrics",
+    "slot_3": "university",
+    "slot_4": "todo",
+    "slot_5": "break_reminder",
+    "slot_6": "logs"
+  },
+  "widget_order": [
+    "university",
+    "metrics",
+    "todo",
+    "focus_timer",
+    "logs",
+    "break_reminder",
+    "focus_streak",
+    "distraction_blocker",
+    "hydration_reminder",
+    "pomodoro_cycles",
+    "calendar",
+    "weather",
+    "habit_tracker",
+    "motivational_quote",
+    "system_stats",
+    "countdown",
+    "sticky_notes",
+    "media_controls",
+    "focus_music",
+    "github_notifications",
+    "fan_speed"
+  ]
 }

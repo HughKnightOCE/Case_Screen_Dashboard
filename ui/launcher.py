@@ -27,6 +27,7 @@ from PySide6.QtWidgets import (
     QWidget,
     QFrame,
     QGridLayout,
+    QScrollArea,
 )
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtCore import QUrl
@@ -239,13 +240,23 @@ class LaunchDialog(QDialog):
         super().__init__()
         self.cfg = cfg
         self.setWindowTitle("Case Dashboard Launcher")
-        self.setMinimumSize(700, 650)
-        self.setMaximumSize(900, 800)
+        self.setMinimumSize(700, 750)
+        self.setMaximumSize(900, 950)
         
         # Main layout
         main_layout = QVBoxLayout(self)
-        main_layout.setSpacing(12)
-        main_layout.setContentsMargins(20, 20, 20, 20)
+        main_layout.setSpacing(0)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # Scrollable content area
+        scroll = QScrollArea(self)
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet("QScrollArea { border: none; }")
+        
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+        scroll_layout.setSpacing(12)
+        scroll_layout.setContentsMargins(20, 20, 20, 20)
 
         # === DISPLAY SECTION ===
         display_box = QGroupBox("Display Configuration")
@@ -264,7 +275,7 @@ class LaunchDialog(QDialog):
         self.screen_combo.setMinimumHeight(28)
         display_layout.addWidget(display_label)
         display_layout.addWidget(self.screen_combo)
-        main_layout.addWidget(display_box)
+        scroll_layout.addWidget(display_box)
 
         # === LAYOUT SECTION ===
         layout_box = QGroupBox("Dashboard Layout")
@@ -282,7 +293,7 @@ class LaunchDialog(QDialog):
         self.layout_combo.setMinimumHeight(28)
         layout_layout.addWidget(layout_label)
         layout_layout.addWidget(self.layout_combo)
-        main_layout.addWidget(layout_box)
+        scroll_layout.addWidget(layout_box)
 
         # === FONT SIZE SECTION ===
         font_box = QGroupBox("Application Font Size")
@@ -302,7 +313,7 @@ class LaunchDialog(QDialog):
         self.font_size_spin.setMinimumHeight(28)
         font_layout.addWidget(font_label)
         font_layout.addWidget(self.font_size_spin)
-        main_layout.addWidget(font_box)
+        scroll_layout.addWidget(font_box)
 
         # === UNIVERSITY TASKS SECTION ===
         uni_box = QGroupBox("University Tasks")
@@ -315,7 +326,7 @@ class LaunchDialog(QDialog):
         uni_manage_btn.setMinimumHeight(32)
         uni_manage_btn.clicked.connect(self._open_uni_dialog)
         uni_layout.addWidget(uni_manage_btn)
-        main_layout.addWidget(uni_box)
+        scroll_layout.addWidget(uni_box)
 
         # === TODO TASKS SECTION ===
         todo_box = QGroupBox("Todo Tasks")
@@ -328,7 +339,7 @@ class LaunchDialog(QDialog):
         todo_manage_btn.setMinimumHeight(32)
         todo_manage_btn.clicked.connect(self._open_todo_dialog)
         todo_layout.addWidget(todo_manage_btn)
-        main_layout.addWidget(todo_box)
+        scroll_layout.addWidget(todo_box)
 
         # === LAYOUT EDITOR SECTION (Visual Grid) ===
         editor_box = QGroupBox("Layout Editor")
@@ -368,14 +379,21 @@ class LaunchDialog(QDialog):
         self._refresh_grid_from_preset()
         self.layout_combo.currentTextChanged.connect(self._refresh_grid_from_preset)
 
-        main_layout.addWidget(editor_box)
+        scroll_layout.addWidget(editor_box)
 
         # Add stretch to push everything to top
-        main_layout.addStretch(1)
+        scroll_layout.addStretch(1)
+
+        scroll.setWidget(scroll_widget)
+        main_layout.addWidget(scroll, 1)
 
         # === BUTTONS AT BOTTOM ===
-        btn_row = QHBoxLayout()
+        btn_container = QWidget()
+        btn_container.setStyleSheet("background-color: #f5f5f5; border-top: 1px solid #e0e0e0;")
+        btn_row = QHBoxLayout(btn_container)
         btn_row.setSpacing(12)
+        btn_row.setContentsMargins(20, 12, 20, 12)
+        
         info_btn = QPushButton("Info")
         cancel_btn = QPushButton("Cancel")
         launch_btn = QPushButton("Launch Dashboard")
@@ -394,7 +412,7 @@ class LaunchDialog(QDialog):
         btn_row.addWidget(info_btn)
         btn_row.addWidget(cancel_btn)
         btn_row.addWidget(launch_btn)
-        main_layout.addLayout(btn_row)
+        main_layout.addWidget(btn_container)
 
     def _show_info(self):
         dialog = QDialog(self)
