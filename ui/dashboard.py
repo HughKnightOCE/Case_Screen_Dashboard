@@ -74,6 +74,15 @@ class DashboardView(QWidget):
                 widget.setMinimumHeight(240)
             elif widget_type in ("university", "todo"):
                 widget.setMinimumHeight(300)
+            elif widget_type in ("calendar", "countdown", "sticky_notes"):
+                widget.setMinimumHeight(280)
+            elif widget_type in ("habit_tracker", "system_stats", "motivational_quote"):
+                widget.setMinimumHeight(250)
+            elif widget_type in ("weather", "focus_music", "media_controls", "github_notifications"):
+                widget.setMinimumHeight(220)
+            elif widget_type in ("break_reminder", "focus_streak", "distraction_blocker", 
+                                 "hydration_reminder", "pomodoro_cycles", "fan_speed"):
+                widget.setMinimumHeight(200)
             else:
                 widget.setMinimumHeight(200)
             main_vbox.addWidget(widget)
