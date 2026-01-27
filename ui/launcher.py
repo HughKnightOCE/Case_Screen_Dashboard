@@ -389,7 +389,24 @@ class LaunchDialog(QDialog):
 
         # === BUTTONS AT BOTTOM ===
         btn_container = QWidget()
-        btn_container.setStyleSheet("background-color: #f5f5f5; border-top: 1px solid #e0e0e0;")
+        btn_container.setStyleSheet("""
+            QWidget {
+                background-color: #2a2a2a;
+                border-top: 1px solid #1a1a1a;
+            }
+            QPushButton {
+                background-color: #0d47a1;
+                color: white;
+                border: none;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: #1565c0;
+            }
+            QPushButton:pressed {
+                background-color: #0d3f8f;
+            }
+        """)
         btn_row = QHBoxLayout(btn_container)
         btn_row.setSpacing(12)
         btn_row.setContentsMargins(20, 12, 20, 12)
@@ -398,9 +415,9 @@ class LaunchDialog(QDialog):
         cancel_btn = QPushButton("Cancel")
         launch_btn = QPushButton("Launch Dashboard")
 
-        info_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
-        cancel_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
-        launch_btn.setStyleSheet("font-size: 11pt; padding: 8px; font-weight: bold;")
+        info_btn.setFont(QFont("Segoe UI", 11))
+        cancel_btn.setFont(QFont("Segoe UI", 11))
+        launch_btn.setFont(QFont("Segoe UI", 11))
         info_btn.setMinimumHeight(36)
         cancel_btn.setMinimumHeight(36)
         launch_btn.setMinimumHeight(36)
